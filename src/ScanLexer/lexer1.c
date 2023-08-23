@@ -65,6 +65,15 @@ int lex(struct Handler *h)
 		}
 		return ID;
 	}
+	if(h->lexem[i] >= '0' && h->lexem[i] <= '9'){
+		do
+		{
+			h->lexem[++i] = fgetc(h->file);
+		} while(h->lexem[i] >= '0' && h->lexem[i] <= '9');
+		h->lexem[i] = '\0';
+		ungetc(h->lexem[i], h->file);
+		return NUM;
+	}
 	return h->lexem[i] != EOF ? lex(h) : EOF;
 }
 
@@ -72,18 +81,18 @@ int main(int argc, char *argv[])
 {
 	if (argc < 2)
 	{
-		printf("Usage: %s <sourcefile>\n", argv[0]);
-		return -1;
+		// printf("Usage: %s <sourcefile>\n", argv[0]);
+		// return -1;
 	}
 	struct Handler *handler = (struct Handler *)malloc(sizeof(struct Handler));
-	handler->file = fopen(argv[1], "r");
+	// handler->file = fopen(argv[1], "r");
+	handler->file = fopen("test.c", "r");
 
 	int tok;
 	while ((tok = lex(handler)) != EOF)
 	{
 		printf("Lexem (%d): %s\n", tok, handler->lexem);
 	}
-
 	fclose(handler->file);
 	free(handler);
 	return 0;
