@@ -37,4 +37,5 @@ env/
 *Lexer.*
 *Listener.*
 *Parser.*
-
+!*Parser.g4
+!*Lexer.g4

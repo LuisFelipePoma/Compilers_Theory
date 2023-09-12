@@ -1,88 +1,153 @@
 # Compilers
-
+---
 ## Scaner (Lexical Analizer)
+### FLEX
 
-```bash
-sudo pacman -S base-devel
-sudo pacman -S flex
-```
-
-```bash
-flex <filename>
-clang <filename>.yy.c
-```
-
+1. Installation
+	```bash
+	sudo pacman -S base-devel
+	sudo pacman -S flex
+	```
+2. Usage
+	```bash
+	flex <filename>
+	clang <filename>.yy.c
+	```
+---
 ## Parser (Syntax Analizer)
 
-```bash
-sudo pacman -S bison
-```
+### BISON
 
-```bash
-bison <filename>
-clang <filename>.tab.c -lm # detect pow -> <math.h>
-```
+1. Install
+	```bash
+	sudo pacman -S bison
+	```
 
-## Install Java
+2. Usage
 
-<https://www.oracle.com/java/technologies/downloads/>
-<https://www.tecmint.com/install-java-on-arch-linux/>
+	```bash
+	bison <filename>
+	```
+	```bash
+	clang <filename>.tab.c -lm # detect pow -> <math.h>
+	```
 
-### CLI
+### ANTLR
+#### Install Java
 
-```bash
-sudo pacman -S jdk-openjdk
+- Install via CLI 
+  1. ArchLinux
+	```bash
+	sudo pacman -S jdk-openjdk
+	```
+  2. Others
+	```bash
+	tar xvzpf jdk-20_linux-x64_bin.tar.gz
+	```
 
-```
+- Install Manually
+   
+  1. Download files
+	Oracle : <https://www.oracle.com/java/technologies/downloads/>
+	Mint : <https://www.tecmint.com/install-java-on-arch-linux/>
+  2. Create a symbolic link 
+	```bash
+	ln -s /home/user/<directory-app> /opt/java
+	```
+  3. Create a Path
+	```sh
+	JAVA_HOME=/opt/java
+	CLASSPATH=$JAVA_HOME/lib
+	PATH=$JAVA_HOME/bin:$PATH
+	export JAVA_HOME
+	export CLASSPATH
+	```
 
-```bash
-tar xvzpf jdk-20_linux-x64_bin.tar.gz
-```
+#### Install Antlr
+1. Installation
+   * Create a virtual enviroment
+		```bash
+		python -m venv /path/to/new/virtual/environment
+		```
+   * Install Antlr using pip
+		```bash
+		python -m pip install antlr4-tools
+		```
+   * Verify installation
+		```bash
+		antlr
+		```
 
-### To create a symbolic link
+2. Usage
+	- Show the parser with a **tree** in terminal
+		```bash
+		antlr4-parse Expr.g4 prog -tree
+		```
 
-```bash
-ln -s /home/user/<directory-app> /opt/java
-```
+	- Show the parser with **tokens** in terminal
+		```bash
+		antlr4-parse Expr.g4 prog -tokens -trace
+		```
+	- Show the parser with a **GUI** in a new window
+		```bash
+		antlr4-parse Expr.g4 prog -gui
+		```
 
-### Create a Path
+3. Compilation
+   
+   - Using `antlr4` as a command, we generate the next files:
+		```bash
+		~ antlr4 Expr.g4 
+		~ ls Expr*.java
 
-```sh
-JAVA_HOME=/opt/java
-CLASSPATH=$JAVA_HOME/lib
-PATH=$JAVA_HOME/bin:$PATH
-export JAVA_HOME
-export CLASSPATH
-```
+		ExprBaseListener.java  	 		ExprLexer.java    
+		ExprListener.java        		1ExprParser.java
+		```
+		> We can also generate the C++ code.
 
-## Install Antlr
+		```bash
+		~ antlr4 -Dlanguage=Cpp Expr.g4
+		~ ls Expr*.cpp Expr*.h
 
-```bash
-python -m pip install antlr4-tools
-```
+		ExprBaseListener.cpp  ExprLexer.cpp         ExprListener.cpp      ExprParser.cpp
+		ExprBaseListener.h    ExprLexer.h           ExprListener.h        ExprParser.h
+		```
 
-```bash
-antlr
-```
+   - Now to compile with two files **ExprLexer** and **ExprParser**
 
-### Usage
 
-```bash
-antlr4-parse Expr.g4 prog -tree
-```
 
-```bash
-antlr4-parse Expr.g4 prog -tokens -trace
-```
+     * How to be `setup.sh`
 
-```bash
-antlr4-parse Expr.g4 prog -gui
-```
+		```sh
+		#!/usr/bin/sh
 
-```bash
-antlr4 Expr.g4 
-```
+		setup(){
+			local venvpath="$HOME/path/to/env"
 
-```bash
-antlr4 -Dlanguage=Cpp Expr.g4
-```
+			source "${venvpath}/bin/activate"
+			
+			export CLASSPATH=.:~/.m2/repository/org/antlr/antlr4/4.13.1/antlr4-4.13.1-complete.jar:$CLASSPATH
+			alias grun='java org.antlr.v4.gui.TestRig'
+		}
+
+		setup
+		```
+	* Now we compile boths files.
+		```bash
+		antlr4 Expr*.g4
+		```
+	* With `javac` we compile the java codes generated.
+		```bash
+		javac *.java
+		```
+	* Execute the script
+		```bash
+		./setup.sh
+		```
+
+     * Finally run Antlr with `grun`
+		```bash
+		grun <GrammarName> <RuleStart> -<param>
+		```
+
