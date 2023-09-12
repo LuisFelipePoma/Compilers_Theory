@@ -36,30 +36,44 @@
 
 - Install via CLI
 
-  1. ArchLinux
+  1. [ArchLinux](https://www.tecmint.com/install-java-on-arch-linux/)
+   
+	* Now we are going to install the latest version of JRE
+		```bash
+		sudo pacman -S jre-openjdk
+		```
+
+	* Now we are going to install the latest version of JDK
 		```bash
 		sudo pacman -S jdk-openjdk
 		```
-  
-  2. Others
+   2. Others
 		```bash
-		tar xvzpf jdk-20_linux-x64_bin.tar.gz
+		sudo apt install openjdk-XX-jdk
 		```
- 
+		>Install the latest available version for your distro
+
 - Install Manually
   
-  1. Download files
-     
-     	- Oracle : <https://www.oracle.com/java/technologies/downloads/>
-     	- Mint : <https://www.tecmint.com/install-java-on-arch-linux/>
-     	  
-  3. Create a symbolic link 
+  1. [Download from Oracle](https://www.oracle.com/java/technologies/downloads/)
+     	```bash
+		curl -O https://download.oracle.com/java/20/latest/jdk-20_linux-x64_bin.deb
+		```
+  2. Install JDK
+		```bash
+		sudo dpkg -i jdk-20_linux-x64_bin.deb
+		```
+		> If you have errors, install the missing dependencies with the comand below and install again
+		```bash
+		sudo apt install -y <lib-name>
+		```
+		
+  3. `OPTIONAL` Create a symbolic link 
 		```bash
 		ln -s /home/user/<directory-app> /opt/java
 		```
   
-  3. Create a Path
-      
+  4. `OPTIONAL` Create a Path
 	  ```bash
 		JAVA_HOME=/opt/java
 		CLASSPATH=$JAVA_HOME/lib
