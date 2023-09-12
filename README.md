@@ -8,23 +8,22 @@
 	sudo pacman -S base-devel
 	sudo pacman -S flex
 	```
+ 
 2. Usage
 	```bash
 	flex <filename>
 	clang <filename>.yy.c
 	```
+ 
 ---
 ## Parser (Syntax Analizer)
-
 ### BISON
-
 1. Install
 	```bash
 	sudo pacman -S bison
 	```
 
-2. Usage
-
+3. Usage
 	```bash
 	bison <filename>
 	```
@@ -35,33 +34,39 @@
 ### ANTLR
 #### Install Java
 
-- Install via CLI 
-  1. ArchLinux
-	```bash
-	sudo pacman -S jdk-openjdk
-	```
-  2. Others
-	```bash
-	tar xvzpf jdk-20_linux-x64_bin.tar.gz
-	```
+- Install via CLI
 
+  1. ArchLinux
+		```bash
+		sudo pacman -S jdk-openjdk
+		```
+  
+  2. Others
+		```bash
+		tar xvzpf jdk-20_linux-x64_bin.tar.gz
+		```
+ 
 - Install Manually
-   
+  
   1. Download files
-	Oracle : <https://www.oracle.com/java/technologies/downloads/>
-	Mint : <https://www.tecmint.com/install-java-on-arch-linux/>
-  2. Create a symbolic link 
-	```bash
-	ln -s /home/user/<directory-app> /opt/java
-	```
+     
+     	- Oracle : <https://www.oracle.com/java/technologies/downloads/>
+     	- Mint : <https://www.tecmint.com/install-java-on-arch-linux/>
+     	  
+  3. Create a symbolic link 
+		```bash
+		ln -s /home/user/<directory-app> /opt/java
+		```
+  
   3. Create a Path
-	```sh
-	JAVA_HOME=/opt/java
-	CLASSPATH=$JAVA_HOME/lib
-	PATH=$JAVA_HOME/bin:$PATH
-	export JAVA_HOME
-	export CLASSPATH
-	```
+      
+	  ```bash
+		JAVA_HOME=/opt/java
+		CLASSPATH=$JAVA_HOME/lib
+		PATH=$JAVA_HOME/bin:$PATH
+		export JAVA_HOME
+		export CLASSPATH
+	  ```
 
 #### Install Antlr
 1. Installation
@@ -69,15 +74,17 @@
 		```bash
 		python -m venv /path/to/new/virtual/environment
 		```
+   
    * Install Antlr using pip
 		```bash
 		python -m pip install antlr4-tools
 		```
+   
    * Verify installation
 		```bash
 		antlr
 		```
-
+   
 2. Usage
 	- Show the parser with a **tree** in terminal
 		```bash
@@ -88,13 +95,13 @@
 		```bash
 		antlr4-parse Expr.g4 prog -tokens -trace
 		```
+  
 	- Show the parser with a **GUI** in a new window
 		```bash
 		antlr4-parse Expr.g4 prog -gui
 		```
-
+  
 3. Compilation
-   
    - Using `antlr4` as a command, we generate the next files:
 		```bash
 		~ antlr4 Expr.g4 
@@ -103,6 +110,7 @@
 		ExprBaseListener.java  	 		ExprLexer.java    
 		ExprListener.java        		1ExprParser.java
 		```
+   
 		> We can also generate the C++ code.
 
 		```bash
