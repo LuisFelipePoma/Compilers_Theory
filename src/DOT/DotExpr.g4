@@ -5,42 +5,42 @@ graph
     ;
 
 stmt_list
-    :  (stmt A? stmt_list)?
+    :  (stmt A?) stmt_list?                     # StmtList
     ;
 
 stmt
-    : subgraph
-    | node_stmt
-    | edge_stmt
-    | attr_stmt
-    | ID '=' ID
+    : subgraph                                  # SubGraph
+    | node_stmt                                 # Node
+    | edge_stmt                                 # Edge
+    | attr_stmt                                 # Attr
+    | ID '=' ID                                 # Assign
     ;
 attr_stmt
-    : (GRAPH|NODE|EDGE) attr_list
+    : (GRAPH|NODE|EDGE) attr_list+
     ;
 
 attr_list
-    : '[' a_list? ']' attr_list?
+    : '[' a_list+ ']'
     ;
 
 a_list
-    : ID '=' ID A? a_list?
+    : ID '=' ID A? 
     ;
 
 edge_stmt
-    : (node_id|subgraph) edgeRHS attr_list?
+    : (node_id|subgraph) edgeRHS attr_list?     # EdgeStmt   
     ;
 
 edgeRHS
-    : EDGEOP (node_id|subgraph) edgeRHS?
+    : EDGEOP (node_id | subgraph) edgeRHS?                 # EdgeRhs
     ;
 
 node_stmt 
-    : node_id attr_list?
+    : node_id attr_list?                        # NodeStmt
     ;
 
 node_id
-    : ID port?
+    : ID port?                                  # Id
     ;
 
 port
@@ -49,7 +49,7 @@ port
     ;
     
 subgraph	
-    : (SUBGRAPH ID?)? '{' stmt_list '}'
+    : (SUBGRAPH ID?)? '{' stmt_list '}'         # SubGraphBody
     ;
 compass_pt
     : COMPASS_PT

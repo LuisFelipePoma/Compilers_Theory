@@ -1,0 +1,7 @@
+digraph D {
+
+    A -> X
+    R -> b
+    R -> X
+   
+   }
