@@ -1,9 +1,10 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-public class ExprJoyRide {
+public class calc {
     public static void main(String[] args) throws Exception {
         String inputFile = null;
         if (args.length > 0)
@@ -12,10 +13,11 @@ public class ExprJoyRide {
         if (inputFile != null)
             is = new FileInputStream(inputFile);
         CharStream input = CharStreams.fromStream(is);
-        ExprLexer lexer = new ExprLexer(input);
+        LabeledExprLexer lexer = new LabeledExprLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        ExprParser parser = new ExprParser(tokens);
+        LabeledExprParser parser = new LabeledExprParser(tokens);
         ParseTree tree = parser.prog();
-        System.out.println(tree.toStringTree(parser));
+        EvalVisitorImpl eval = new EvalVisitorImpl();
+        eval.visit(tree);
     }
 }

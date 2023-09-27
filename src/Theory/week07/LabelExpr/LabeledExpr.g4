@@ -10,18 +10,18 @@ stat
     | NEWLINE                   # blank
     ;
 expr
-    : expr ('*'|'/') expr       # MulDiv
-    | expr ('+'|'-') expr       # AddSub
-    | INT                       # int
-    | ID                        # id
-    | '(' expr ')'              # parens
+    : expr op=('*'|'/') expr       # MulDiv
+    | expr op=('+'|'-') expr       # AddSub
+    | INT                       # Int
+    | ID                        # Id
+    | '(' expr ')'              # Parens
     ;
 
 /* Lexical analizer*/
 
 MUL: '*';
 DIV: '/';
-ADDL: '+';
+ADD: '+';
 SUB: '-';
 
 

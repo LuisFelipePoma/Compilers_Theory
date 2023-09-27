@@ -1,7 +1,6 @@
 grammar Expr;
 
 /* Syntax analizer*/
-
 prog: stat+ ;
 
 stat

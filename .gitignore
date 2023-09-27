@@ -39,3 +39,5 @@ env/
 *Parser.*
 !*Parser.g4
 !*Lexer.g4
+
+.antlr/

@@ -37,13 +37,6 @@ public interface LabeledExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlank(LabeledExprParser.BlankContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code parens}
-	 * labeled alternative in {@link LabeledExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParens(LabeledExprParser.ParensContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code MulDiv}
 	 * labeled alternative in {@link LabeledExprParser#expr}.
 	 * @param ctx the parse tree
@@ -58,14 +51,21 @@ public interface LabeledExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddSub(LabeledExprParser.AddSubContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code id}
+	 * Visit a parse tree produced by the {@code Parens}
+	 * labeled alternative in {@link LabeledExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParens(LabeledExprParser.ParensContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Id}
 	 * labeled alternative in {@link LabeledExprParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitId(LabeledExprParser.IdContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code int}
+	 * Visit a parse tree produced by the {@code Int}
 	 * labeled alternative in {@link LabeledExprParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
