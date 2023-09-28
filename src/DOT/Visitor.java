@@ -16,7 +16,6 @@ public class Visitor extends DotExprBaseVisitor<String> {
         String id = ctx.ID(0).getText();
         String value = ctx.ID(1).getText();
         memory.put(id, value);
-        // System.out.println(value);
         return "0";
     }
 
@@ -24,13 +23,12 @@ public class Visitor extends DotExprBaseVisitor<String> {
     @Override
     public String visitEdgeStmt(DotExprParser.EdgeStmtContext ctx) {
         // Create a list of edges
-        // List<String> arr = new ArrayList<>();
         // Get the node
         node = ctx.node_id().getText();
         // Get the iterator
         String element = visit(ctx.edgeRHS());
-        // // Add all the edges
-
+        
+        // Add all the edges
         if (list.containsKey(node)) {
             // If the key is already present, get the list of values
             List<String> values = list.get(node);
@@ -42,16 +40,8 @@ public class Visitor extends DotExprBaseVisitor<String> {
             values.add(element);
             list.put(node, values);
         }
-        // while (iter.hasNext()) {
-        // String element = visit(iter.next());
-        // arr.add(element);
-        // node = element;
-        // }
 
-        // Add the attributes
-        // list.put(node, element);
-
-        // // Write to file
+        // Write to file
         try (PrintWriter writer = new PrintWriter("output.txt")) {
             for (Map.Entry<String, List<String>> entry : list.entrySet()) {
                 String key = entry.getKey();
@@ -71,30 +61,8 @@ public class Visitor extends DotExprBaseVisitor<String> {
     /* EDGEOP (node_id|subgraph) edgeRHS? # EdgeRhs */
     @Override
     public String visitEdgeRhs(DotExprParser.EdgeRhsContext ctx) {
-        // ctx.children.get(0);
-        System.out.println(ctx.getChild(1).getClass());
-
         return visit(ctx.getChild(1));
     }
-
-    /* (SUBGRAPH ID?)? '{' stmt_list '}' # SubGraphBody */
-    // @Override
-    // public String visitSubGraphBody(DotExprParser.SubGraphBodyContext ctx) {
-    //     System.out.println("POVVVV");
-    //     return visit(ctx.stmt_list());
-    // }
-
-    /* (stmt A?) stmt_list? # StmtList */
-    // @Override
-    // public String visitStmtList(DotExprParser.StmtListContext ctx) {
-    //     return visit(ctx.stmt());
-    // }
-
-    /* node_id attr_list? # NodeStmt */
-    // @Override
-    // public String visitNodeStmt(DotExprParser.NodeStmtContext ctx) {
-    //     return visit(ctx.node_id());
-    // }
 
     /* ID port? # Id */
     @Override
