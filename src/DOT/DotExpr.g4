@@ -1,11 +1,11 @@
 grammar DotExpr;
 
 graph
-    : STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF
+    : STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # StmtList
     ;
 
 stmt_list
-    :  (stmt A?) stmt_list?                     # StmtList
+    :  (stmt A?) stmt_list?                     
     ;
 
 stmt

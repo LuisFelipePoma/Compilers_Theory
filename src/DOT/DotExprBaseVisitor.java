@@ -17,14 +17,14 @@ public class DotExprBaseVisitor<T> extends AbstractParseTreeVisitor<T> implement
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitGraph(DotExprParser.GraphContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStmtList(DotExprParser.StmtListContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitStmtList(DotExprParser.StmtListContext ctx) { return visitChildren(ctx); }
+	@Override public T visitStmt_list(DotExprParser.Stmt_listContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

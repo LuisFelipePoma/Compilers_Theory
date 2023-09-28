@@ -10,18 +10,18 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface DotExprVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link DotExprParser#graph}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGraph(DotExprParser.GraphContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code StmtList}
-	 * labeled alternative in {@link DotExprParser#stmt_list}.
+	 * labeled alternative in {@link DotExprParser#graph}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStmtList(DotExprParser.StmtListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link DotExprParser#stmt_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmt_list(DotExprParser.Stmt_listContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code SubGraph}
 	 * labeled alternative in {@link DotExprParser#stmt}.

@@ -40,4 +40,7 @@ env/
 !*Parser.g4
 !*Lexer.g4
 
+#Visitor
+*ExprVisitor.java
+*BaseVisitor.java
 .antlr/
