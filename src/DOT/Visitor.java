@@ -45,12 +45,21 @@ public class Visitor extends DotExprBaseVisitor<String> {
     public String visitEdgeRhs(DotExprParser.EdgeRhsContext ctx) {
         String n = ctx.getChild(1).getText();
         String e = "";
-        if (ctx.children.size() == 3)
+        if (ctx.children.size() == 3) {
             e = visit(ctx.edgeRHS());
+            insertNode(n, e);
+        }
         System.out.print(n);
         System.out.println(e);
-        insertNode(n, e);
         return visit(ctx.getChild(1));
+    }
+
+    /* (SUBGRAPH ID?)? '{' stmt_list '}' # SubGraphBody */
+    @Override
+    public String visitSubGraphBody(DotExprParser.SubGraphBodyContext ctx) {
+        String e = visit(ctx.stmt_list());
+        System.out.println("subgraph");
+        return "e";
     }
 
     /* ID port? # Id */

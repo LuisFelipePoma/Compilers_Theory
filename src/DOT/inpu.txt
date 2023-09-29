@@ -1,7 +1,7 @@
-digraph D {
+digraph G {
 
-  A 
-  B -> C
-  C
- 
- }
+    b2 -> a3
+    a1 ->{a0 ,a9,a1} -> a3 
+    a3 -> a0
+  
+  }
