@@ -64,6 +64,6 @@ NODE       : 'node';
 EDGE       : 'edge';
 COMPASS_PT : 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
 
-ID         : [a-zA-Z_]+[a-zA-Z_0-9]* ;
+ID         : ["]+[a-zA-Z0-9:|]*["]+ | [a-zA-Z:|]+[a-zA-Z_0-9:|]* | [-]? [0-9]+;
 EDGEOP     : '->' | '--' ; 
 WS         : [ \t\n\r\f"]+ -> skip ;
