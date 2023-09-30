@@ -8,56 +8,108 @@ import java.util.Map;
 public class Visitor extends DotExprBaseVisitor<String> {
     Map<String, String> symbolTable = new HashMap<String, String>();
     Map<String, List<String>> list = new HashMap<String, List<String>>();
+    List<String> SUBGRAPH = new ArrayList<String>();
+    Boolean isSubgraph = false;
+    Boolean isAttr = false;
     String node;
+    String tmp;
 
-    /* STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # GraphBody */
+    /* STRICT? (GRAPH|DIGRAPH) id_? '{' stmt_list '}' EOF # GraphBody */
     @Override
     public String visitGraphBody(DotExprParser.GraphBodyContext ctx) {
+        // Get the type of the graph
+        // if(ctx.children == null) System.out.println("ctx");;
+
+        // Get the name of the graph
+        // Boolean name = ctx.id_().isEmpty();
+
         visit(ctx.stmt_list());
         writeFile();
         return "true";
     }
 
-    /* ID '=' ID #Assign */
+    /* (stmt sep?)+ # StmtList */
+    @Override
+    public String visitStmtList(DotExprParser.StmtListContext ctx) {
+        ctx.stmt().forEach(tree -> visit(tree));
+        return "stmt";
+    }
+
+    /* id_ '=' id_ #Assign */
     @Override
     public String visitAssign(DotExprParser.AssignContext ctx) {
-        String id = ctx.ID(0).getText();
-        String value = ctx.ID(1).getText();
+        String id = ctx.id_(0).getText();
+        String value = ctx.id_(1).getText();
         symbolTable.put(id, value);
         return value;
     }
 
-    /* (node_id|subgraph) edgeRHS+ attr_list? #EdgeStmt */
+    // /* (id_ ( '=' id_ )? sep? )+ #AList */
+    // @Override
+    // public String visitAList(DotExprParser.AListContext ctx){
+    //     String id = ctx.id_(0).getText();
+    //     String value = ctx.id_(1).getText();
+    //     if(isAttr)
+    //     symbolTable.put(id, value);
+    //     return value;
+    // }
+
+    /* ((node_id | subgraph) edgeRHS )+ attr_list? # EdgeStmt */
     @Override
     public String visitEdgeStmt(DotExprParser.EdgeStmtContext ctx) {
-        // Get the node
+
         node = visit(ctx.getChild(0));
-        // Get the iterator
-        String element = visit(ctx.edgeRHS());
-        // Add all the edges
-        insertNode(node, element);
-        return node;
+        if (!isSubgraph)
+            tmp = node;
+
+        Integer size = ctx.children.size();
+
+        for (int i = 1; i < size; i++) {
+            String type = ctx.getChild(i).getClass().getSimpleName();
+            switch (type) {
+                case "EdgeRhsContext":
+                    String id = visit(ctx.getChild(i));
+                    if (id == null) {
+                        final Integer pos = i;
+                        node = visit(ctx.getChild(pos + 1));
+                        SUBGRAPH.forEach(nodes -> insertNode(nodes, node));
+                        SUBGRAPH.clear();
+                        i++;
+                    } else {
+                        insertNode(node, id);
+                        node = id;
+                    }
+                    break;
+                case "EdgeopContext":
+                    break;
+            }
+        }
+
+        voidNode(node);
+        return null;
     }
 
-    /* EDGEOP (node_id|subgraph) edgeRHS? # EdgeRhs */
+    /* (edgeop ( node_id | subgraph)) # EdgeRhs */
     @Override
     public String visitEdgeRhs(DotExprParser.EdgeRhsContext ctx) {
-        String node = visit(ctx.getChild(1));
-
-        // String n = ctx.getChild(1).getText();
-        String element = "";
-        if (ctx.children.size() == 3) {
-            element = visit(ctx.edgeRHS());
-            insertNode(node, element);
+        String type = ctx.getChild(1).getClass().getSimpleName();
+        if (type.contains("SubGraphBodyContext")) {
+            isSubgraph = true;
+            visit(ctx.getChild(1));
+            SUBGRAPH.forEach(nodes -> insertNode(tmp, nodes));
+            isSubgraph = false;
+            return null;
         }
-        voidNode(node);
-        return node;
+        return visit(ctx.getChild(1));
     }
 
-    /* (SUBGRAPH ID?)? '{' stmt_list '}' # SubGraphBody */
+    /* (SUBGRAPH id_?)? '{' stmt_list '}' # SubGraphBody */
     @Override
     public String visitSubGraphBody(DotExprParser.SubGraphBodyContext ctx) {
-        return visit(ctx.stmt_list());
+        visit(ctx.stmt_list());
+        if (ctx.children.size() != 3)
+            ; // TODO add id to table
+        return null;
     }
 
     /* node_id attr_list? # NodeStmt */
@@ -68,10 +120,13 @@ public class Visitor extends DotExprBaseVisitor<String> {
         return node_id;
     }
 
-    /* ID port? # Id */
+    /* id_ port? # Id */
     @Override
     public String visitId(DotExprParser.IdContext ctx) {
-        String id = ctx.ID().getText();
+        String id = ctx.id_().getText();
+        if (isSubgraph) {
+            SUBGRAPH.add(id);
+        }
         symbolTable.put(id, "node");
         return id;
     }

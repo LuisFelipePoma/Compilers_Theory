@@ -1,69 +1,98 @@
 grammar DotExpr;
 
 graph
-    : STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # GraphBody
+    : STRICT? ( GRAPH | DIGRAPH ) id_? '{' stmt_list '}' EOF  # GraphBody
     ;
 
 stmt_list
-    :  (stmt A?) stmt_list?                     
+    : (stmt sep?)+  # StmtList
     ;
-
 stmt
-    : subgraph                                  # SubGraph
-    | node_stmt                                 # Node
-    | edge_stmt                                 # Edge
-    | attr_stmt                                 # Attr
-    | ID '=' ID                                 # Assign
+    : node_stmt   # Node 
+    | edge_stmt   # Edge
+    | attr_stmt   # Attr
+    | id_ '=' id_ # Assign
+    | subgraph    # SubGraph
     ;
 attr_stmt
-    : (GRAPH|NODE|EDGE) attr_list+
+    : (GRAPH | NODE | EDGE ) attr_list
     ;
-
 attr_list
-    : '[' a_list+ ']'
+    : ('[' a_list? ']')+
     ;
-
 a_list
-    : ID '=' ID A? 
+    : (id_ ( '=' id_ )? sep? )+ #AList
     ;
-
 edge_stmt
-    : (node_id|subgraph) edgeRHS attr_list?     # EdgeStmt   
+    : ((node_id | subgraph) edgeRHS+ )+ attr_list? # EdgeStmt
     ;
-
 edgeRHS
-    : EDGEOP (node_id | subgraph) edgeRHS?                 # EdgeRhs
+    : (edgeop ( node_id | subgraph)) # EdgeRhs
     ;
-
-node_stmt 
-    : node_id attr_list?                        # NodeStmt
+edgeop
+    : '->' | '--'
     ;
-
+sep
+    : ',' | ';'
+    ;
+node_stmt
+    : node_id attr_list? # NodeStmt
+    ;
 node_id
-    : ID port?                                  # Id
+    : id_ port? # Id
     ;
-
 port
-    : ':' ID (':' compass_pt)+
-    | ':' compass_pt
+    : ':' id_ ( ':' id_ )?
     ;
-    
-subgraph	
-    : (SUBGRAPH ID?)? '{' stmt_list '}'         # SubGraphBody
+subgraph
+    : (SUBGRAPH id_?)? '{' stmt_list '}' # SubGraphBody
     ;
-compass_pt
-    : COMPASS_PT
+id_
+    : ID2 | STRING | HTML_STRING | NUMBER
     ;
 
-A: ';' | ',' ;
-STRICT     : 'strict';
-GRAPH      : 'graph';
-DIGRAPH    : 'digraph';
-SUBGRAPH   : 'subgraph';
-NODE       : 'node';
-EDGE       : 'edge';
-COMPASS_PT : 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_';
+STRICT
+   : [Ss] [Tt] [Rr] [Ii] [Cc] [Tt]
+   ;
+GRAPH
+   : [Gg] [Rr] [Aa] [Pp] [Hh]
+   ;
+DIGRAPH
+   : [Dd] [Ii] [Gg] [Rr] [Aa] [Pp] [Hh]
+   ;
+NODE
+   : [Nn] [Oo] [Dd] [Ee]
+   ;
+EDGE
+   : [Ee] [Dd] [Gg] [Ee]
+   ;
+SUBGRAPH
+   : [Ss] [Uu] [Bb] [Gg] [Rr] [Aa] [Pp] [Hh]
+   ;
+   
+NUMBER: '-'? ( '.' DIGIT+ | DIGIT+ ( '.' DIGIT* )? )
+        ;
+        
+fragment DIGIT
+   : [0-9]
+   ;
+STRING: '"' ( '\\"' | . )*? '"';
+ID2: LETTER ( LETTER | DIGIT )*;
 
-ID         : ["]+[a-zA-Z0-9:|]*["]+ | [a-zA-Z:|]+[a-zA-Z_0-9:|]* | [-]? [0-9]+;
-EDGEOP     : '->' | '--' ; 
-WS         : [ \t\n\r\f"]+ -> skip ;
+fragment LETTER
+   : [a-zA-Z\u0080-\u00FF_]
+   ;
+HTML_STRING
+   : '<' ( TAG | ~ [<>] )* '>'
+   ;
+fragment TAG
+   : '<' .*? '>'
+   ; 
+   
+COMMENT
+   : '#' ~[\r\n]* -> skip
+   ;
+
+WS
+   : [ \t\n\r]+ -> skip
+   ;
