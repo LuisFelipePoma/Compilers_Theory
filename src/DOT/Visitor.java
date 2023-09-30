@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Visitor extends DotExprBaseVisitor<String> {
-    Map<String, String> memory = new HashMap<String, String>();
+    Map<String, String> symbolTable = new HashMap<String, String>();
     Map<String, List<String>> list = new HashMap<String, List<String>>();
     String node;
 
-    /* STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # StmtList */
+    /* STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # GraphBody */
     @Override
-    public String visitStmtList(DotExprParser.StmtListContext ctx) {
+    public String visitGraphBody(DotExprParser.GraphBodyContext ctx) {
         visit(ctx.stmt_list());
         writeFile();
         return "true";
@@ -23,7 +23,7 @@ public class Visitor extends DotExprBaseVisitor<String> {
     public String visitAssign(DotExprParser.AssignContext ctx) {
         String id = ctx.ID(0).getText();
         String value = ctx.ID(1).getText();
-        memory.put(id, value);
+        symbolTable.put(id, value);
         return value;
     }
 
@@ -81,16 +81,25 @@ public class Visitor extends DotExprBaseVisitor<String> {
         if (list.containsKey(node)) {
             // If the key is already present, get the list of values
             List<String> values = list.get(node);
-
             values.removeIf((String arg0) -> arg0 == "-");
+            // Add node and value to the symbolTable
+            insertTableSymbolic(node, element);
             // Add the new value to the list
             values.add(element);
         } else {
             // If the key is not present, create a new list with the value
             List<String> values = new ArrayList<>();
+            // Add node and value to the symbolTable
+            insertTableSymbolic(node, element);
+            // Add the new value to the list
             values.add(element);
             list.put(node, values);
         }
+    }
+
+    public void insertTableSymbolic(String node, String element) {
+        if (element != "-")
+            symbolTable.put(node + " -> " + element, "edge");
     }
 
     public void writeFile() {
@@ -100,7 +109,6 @@ public class Visitor extends DotExprBaseVisitor<String> {
                 List<String> values = entry.getValue();
                 writer.print(key + ": ");
                 for (String value : values) {
-                    // if (value != null)
                     writer.print(value + " ");
                 }
                 writer.println();
@@ -113,5 +121,9 @@ public class Visitor extends DotExprBaseVisitor<String> {
     public void voidNode(String node) {
         if (!list.containsKey(node))
             insertNode(node, "-");
+    }
+
+    public Map<String, String> getSymbolTable() {
+        return symbolTable;
     }
 }

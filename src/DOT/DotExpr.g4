@@ -1,7 +1,7 @@
 grammar DotExpr;
 
 graph
-    : STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # StmtList
+    : STRICT? (GRAPH|DIGRAPH) ID? '{' stmt_list '}' EOF # GraphBody
     ;
 
 stmt_list

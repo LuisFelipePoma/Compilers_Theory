@@ -1,4 +1,6 @@
 digraph D {
-
     start -> 0 -> 1 -> 2 ->  end
+    0 = 1
+    2 -> 3
+    3 = text
  }
