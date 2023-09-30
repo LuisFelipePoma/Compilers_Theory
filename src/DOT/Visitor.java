@@ -31,7 +31,7 @@ public class Visitor extends DotExprBaseVisitor<String> {
     @Override
     public String visitEdgeStmt(DotExprParser.EdgeStmtContext ctx) {
         // Get the node
-        node = ctx.node_id().getText();
+        node = visit(ctx.getChild(0));
         // Get the iterator
         String element = visit(ctx.edgeRHS());
         // Add all the edges
@@ -72,6 +72,7 @@ public class Visitor extends DotExprBaseVisitor<String> {
     @Override
     public String visitId(DotExprParser.IdContext ctx) {
         String id = ctx.ID().getText();
+        symbolTable.put(id, "node");
         return id;
     }
 
