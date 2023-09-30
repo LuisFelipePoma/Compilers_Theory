@@ -157,7 +157,7 @@
 		```
 	* Now we compile boths files.
 		```bash
-		antlr4 Expr*.g4
+		antlr4 -no-listener -visitor -o <folderName> Expr*.g4
 		```
 	* With `javac` we compile the java codes generated.
 		```bash
@@ -171,5 +171,35 @@
      * Finally run Antlr with `grun`
 		```bash
 		grun <GrammarName> <RuleStart> -<param>
-		```
+
+4. Using C++
+   
+   - Create the file `CMakeLists.txt` with the next configurations
+        ```txt
+        cmake_minimum_required(VERSION 3.20)
+        project(antlr)
+        add_executable(antlr main.cpp)
+        target_link_libraries(antlr path/to/antlr4-runtime)
+        ```
+
+   - Configuration for Cmake (create folder `build`)
+        ```bash
+        mkdir build
+        cd build
+        mkdir release
+        mkdir debug
+        ```
+
+    - Now create two subfolders `release` and `debug`
+        ```bash
+        mkdir release
+        mkdir debug
+        ```
+
+    - Now from each of both subfolders, execute the nex command
+        ```bash
+        cmake -DCMAKE_BUILD_TYPE=Debug ../.. # For debug
+        cmake ../.. # For release
+        ```
+    - Now execute the program with `make`
 

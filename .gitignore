@@ -45,3 +45,6 @@ env/
 *BaseVisitor.java
 
 .antlr/
+
+build/
+libs/
