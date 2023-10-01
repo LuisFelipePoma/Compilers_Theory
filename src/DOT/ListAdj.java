@@ -2,7 +2,6 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Map;
 
 public class ListAdj {
     public static void main(String[] args) throws Exception {
@@ -19,13 +18,15 @@ public class ListAdj {
         ParseTree tree = parser.graph();
         System.out.println(tree.toStringTree(parser));
 
+        // Create a visitor
         Visitor eval = new Visitor();
         eval.visit(tree);
 
-        Map<String, String> symbolTable = eval.getSymbolTable();
-        // Ahora puedes trabajar con la tabla de símbolos
-        for (Map.Entry<String, String> entry : symbolTable.entrySet()) {
-            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
-        }
+        // Get the symbol table
+        SymbolTable symbolTable = eval.getSymbolTable();
+        // Print the symbol table
+        symbolTable.printSymbolTable();
+        // Convert the symbol table to adjacency list and write it to a file
+        symbolTable.convertToAdjacencyListAndWriteToFile("output.txt");
     }
 }

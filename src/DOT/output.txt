@@ -1,4 +1,6 @@
-a: b c 
-b: - 
-c: b e 
-e: e b 
+Adjacency list:
+a -> (d,2) (z,1) 
+d -> (x,2) 
+z -> (0,1) 
+0 -> _
+x -> _

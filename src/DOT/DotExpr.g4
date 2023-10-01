@@ -21,10 +21,10 @@ attr_list
     : ('[' a_list? ']')+
     ;
 a_list
-    : (id_ ( '=' id_ )? sep? )+ #AList
+    : (id_ '=' id_  sep? )+ #AList
     ;
 edge_stmt
-    : ((node_id | subgraph) edgeRHS+ )+ attr_list? # EdgeStmt
+    : ((node_id | subgraph) edgeRHS+) attr_list? # EdgeStmt
     ;
 edgeRHS
     : (edgeop ( node_id | subgraph)) # EdgeRhs
@@ -48,7 +48,7 @@ subgraph
     : (SUBGRAPH id_?)? '{' stmt_list '}' # SubGraphBody
     ;
 id_
-    : ID2 | STRING | HTML_STRING | NUMBER
+    : ID | STRING | HTML_STRING | NUMBER
     ;
 
 STRICT
@@ -77,7 +77,7 @@ fragment DIGIT
    : [0-9]
    ;
 STRING: '"' ( '\\"' | . )*? '"';
-ID2: LETTER ( LETTER | DIGIT )*;
+ID: LETTER ( LETTER | DIGIT )*;
 
 fragment LETTER
    : [a-zA-Z\u0080-\u00FF_]
