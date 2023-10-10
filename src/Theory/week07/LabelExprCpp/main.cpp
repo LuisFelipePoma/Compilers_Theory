@@ -7,14 +7,11 @@
 #include "libs/LabeledExprLexer.h"
 #include "libs/LabeledExprParser.h"
 
-using namespace std;
-
 int main(int argc, char **argv)
 {
-	string inputFile = "";
 	if (argc <= 1)
 		return -1;
-	ifstream is;
+	std::ifstream is;
 	is.open(argv[1]);
 	antlr4::ANTLRInputStream input(is);
 	LabeledExprLexer lexer(&input);
