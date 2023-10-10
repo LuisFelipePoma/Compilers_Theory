@@ -137,8 +137,6 @@
 
    - Now to compile with two files **ExprLexer** and **ExprParser**
 
-
-
      * How to be `setup.sh`
 
 		```sh
@@ -171,35 +169,102 @@
      * Finally run Antlr with `grun`
 		```bash
 		grun <GrammarName> <RuleStart> -<param>
+		```
 
-4. Using C++
+4. How to use with C++
+
+	### Configure Antlr Runtime
+
+	- Dowload antlr4-runtime 
+  
+    	1. Using CLI (Arch Linux)
    
-   - Create the file `CMakeLists.txt` with the next configurations
-        ```txt
-        cmake_minimum_required(VERSION 3.20)
-        project(antlr)
-        add_executable(antlr main.cpp)
-        target_link_libraries(antlr path/to/antlr4-runtime)
-        ```
+			```bash
+			sudo pacman -S antlr4-runtime
+			```
 
-   - Configuration for Cmake (create folder `build`)
-        ```bash
-        mkdir build
-        cd build
-        mkdir release
-        mkdir debug
-        ```
+		2. Manually (Others / Debian)
+		
+			- Download `antlr4-runtime` via Curl
 
-    - Now create two subfolders `release` and `debug`
-        ```bash
-        mkdir release
-        mkdir debug
-        ```
+				```bash
+				curl https://www.antlr.org/download/antlr4-cpp-runtime-4.13.1-source.zip -o antlr4-runtime.zip  
+				```
 
-    - Now from each of both subfolders, execute the nex command
-        ```bash
-        cmake -DCMAKE_BUILD_TYPE=Debug ../.. # For debug
-        cmake ../.. # For release
-        ```
-    - Now execute the program with `make`
+			- Now install the necesary dependencies and libraries
 
+				```bash
+				sudo apt install cmake
+				sudo apt install uuid-dev
+				sudo apt install pkg-config 
+				```
+
+			- Now we compile and get the libraries from antlr4-runtime
+
+				```bash
+				mkdir build && mkdir run && cd build
+				cmake ..
+				DESTDIR=../run make install
+				```
+
+			- Now copy the ANTLR 4 include files to `/usr/local/include` and the ANTLR 4 libraries to `/usr/local/lib`
+
+				```bash
+				cd ../run/usr/local/include
+				sudo cp -r antlr4-runtime /usr/local/include
+				cd ../lib
+				sudo cp * /usr/local/lib
+				sudo ldconfig
+				```
+			- Now `antlr4-runtime` is installed
+
+	### How to use
+	- Use with Clang++ (Working)
+		1. First create the files using `antlr4` and save them in directory `libs`
+			```bash
+			antlr4 -no-listener -visitor -o libs -Dlanguage=Cpp *.g4
+			```
+
+		2. And now compile with the next command
+			```bash
+			clang++ -std=c++17 -I/usr/local/include/antlr4-runtime -Ilibs libs/*.cpp -lantlr4-runtime *cpp
+			```
+			> Use `-std=c++17` in case not detect std libraries
+
+			> Use `-I/usr/local/include/antlr4-runtime` if `antlr4-runtime` was installed manually
+
+			> Use `-I/usr/include/antlr4-runtime` if `antlr4-runtime` was installed with package manager
+
+	- Use with Cmake file (Not Working Yet)
+
+        1. Create the file `CMakeLists.txt` with the next configurations
+    		```txt
+    		cmake_minimum_required(VERSION 3.20)
+    		project(antlr)
+    		add_executable(antlr main.cpp)
+    		target_link_libraries(antlr path/to/antlr4-runtime)
+    		```
+
+        2. Configuration for Cmake (create folder `build`)
+           ```bash
+           mkdir build
+           cd build
+           mkdir release
+           mkdir debug
+           ```
+
+        3. Now create two subfolders `release` and `debug`
+           ```bash
+           mkdir release
+           mkdir debug
+           ```
+
+        4. Now from each of both subfolders, execute the nex command
+           ```bash
+           cmake -DCMAKE_BUILD_TYPE=Debug ../.. # For debug
+           cmake ../.. # For release
+           ```
+
+        5. Now execute the program with `make`
+
+	
