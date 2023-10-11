@@ -4,7 +4,7 @@
 
 #include "antlr4-runtime.h"
 #include "EvalVisitorImpl.h"
-#include "libs/LabeledExprLexer.h"
+#include "LabeledExprLexer.h"
 #include "libs/LabeledExprParser.h"
 
 int main(int argc, char **argv)
