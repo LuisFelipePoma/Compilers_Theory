@@ -12,7 +12,7 @@ class EvalVisitorImpl : LabeledExprBaseVisitor
 
 public:
 	/* ID '=' expr NEWLINE */
-	std::any visitAssign(LabeledExprParser::AssignContext *ctx)
+	std::any visitAssign(LabeledExprParser::AssingContext *ctx)
 	{
 		std::string id = ctx->ID()->getText();
 		auto value = visitChildren(ctx->expr());

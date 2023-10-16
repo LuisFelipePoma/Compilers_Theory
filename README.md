@@ -211,7 +211,7 @@
 
 				```bash
 				cd ../run/usr/local/include
-				sudo cp -r antlr4-runtime /usr/local/include
+				ln -s ~/Apps/antlr4-cpp/run/usr/local/include/antlr4-runtime /usr/local/include
 				cd ../lib
 				sudo cp * /usr/local/lib
 				sudo ldconfig
@@ -234,6 +234,12 @@
 			> Use `-I/usr/local/include/antlr4-runtime` if `antlr4-runtime` was installed manually
 
 			> Use `-I/usr/include/antlr4-runtime` if `antlr4-runtime` was installed with package manager
+
+			> Use `-I$ANTLR4I -L$ANTLR4L` if update the file `setup.sh`, exporting the paths of antlr4
+			```sh
+			export ANTLR4I=/usr/local/include/antlr4-runtime
+			export ANTLR4L=/usr/local/lib/antlr4-runtime
+			```
 
 	- Use with Cmake file (Not Working Yet)
 
@@ -266,5 +272,22 @@
            ```
 
         5. Now execute the program with `make`
-
+        
+    - Generate Code to Dot Language
+		- Generate Intermediate code with clang.
+			```bash
+			clang -S -emit-llvm file.c  
+			```
+		- Use opt for optimization
+			```bash
+			opt --dot-cfg file.ll -enable-new-pm=0
+			```
+		- Use dot
+			```bash
+			dot -Tpng .prefix_sum.dot -o ps.png   
+			```
+		- Generate the output with llc (Middle End)
+			```bash
+			llc file.ll -march=arm -o file.arm  
+			```
 	

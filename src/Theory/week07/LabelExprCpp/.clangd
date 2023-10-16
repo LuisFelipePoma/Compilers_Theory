@@ -1,4 +1,0 @@
-CompileFlags: # Tweak the parse settings
-  Add: 
-    - "-I=/home/felipe/Apps/antlr4-cpp/runtime/src"
-
