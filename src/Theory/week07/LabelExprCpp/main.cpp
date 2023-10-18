@@ -20,4 +20,5 @@ int main(int argc, char **argv)
 	auto tree = parser.prog();
 	EvalVisitorImpl eval;
 	eval.visitProg(tree);
+	return 0;
 }

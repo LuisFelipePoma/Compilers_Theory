@@ -2,7 +2,7 @@ grammar LabeledExpr;
 
 /* Syntax analizer */
 
-prog: stat+ ;
+prog: stat+ EOF;
 
 stat
 	: expr NEWLINE          # printExpr
@@ -27,5 +27,5 @@ SUB: '-' ;
 
 ID     : [a-zA-Z]+ ;
 INT    : [0-9]+ ;
-NEWLINE: '\r'? '\n' ;
+NEWLINE: '\n' ;
 WS     : [ \t]+ -> skip ;

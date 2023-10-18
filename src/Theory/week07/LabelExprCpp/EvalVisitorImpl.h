@@ -15,17 +15,17 @@ public:
 	std::any visitAssign(LabeledExprParser::AssignContext *ctx)
 	{
 		std::string id = ctx->ID()->getText();
-		auto value = visitChildren(ctx->expr());
+		auto value = visit(ctx->expr());
 		memory[id] = value;
-		return value;
+		return std::any(value);
 	}
 
 	/* expr NEWLINE */
 	std::any visitPrintExpr(LabeledExprParser::PrintExprContext *ctx)
 	{
-		int value = std::any_cast<int>(visitChildren(ctx->expr()));
+		int value = std::any_cast<int>(visit(ctx->expr()));
 		std::cout << value << '\n';
-		return std::any();
+		return std::any(value);
 	}
 
 	/* INT */
@@ -40,7 +40,7 @@ public:
 		std::string id = ctx->ID()->getText();
 		if (memory.count(id))
 			return memory[id];
-		return std::any();
+		return std::any(id);
 	}
 
 	/* expr op=('*'|'/') expr */
@@ -80,11 +80,14 @@ public:
 	/* '(' expr ')' */
 	std::any visitParens(LabeledExprParser::ParensContext *ctx)
 	{
-		return visitChildren(ctx->expr());
+		return visit(ctx->expr());
 	}
 
 	std::any visitProg(LabeledExprParser::ProgContext *ctx)
 	{
+		// for (size_t i = 0; i > ctx->children.capacity(); i++)
+		// {
 		return visitChildren(ctx);
+		// }
 	}
 };
