@@ -89,5 +89,5 @@ prefix_sum:
 	.size	prefix_sum, .Lfunc_end0-prefix_sum
 	.fnend
                                         @ -- End function
-	.ident	"Debian clang version 14.0.6"
+	.ident	"clang version 16.0.6"
 	.section	".note.GNU-stack","",%progbits
