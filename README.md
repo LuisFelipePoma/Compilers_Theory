@@ -290,4 +290,7 @@
 			```bash
 			llc file.ll -march=arm -o file.arm  
 			```
-	
+	- Compiling a llvm project
+		```bash
+		clang++ <file>.cpp $(llvm-config-15 --cxxflags)
+		```
