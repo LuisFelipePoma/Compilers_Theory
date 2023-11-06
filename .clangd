@@ -1,0 +1,8 @@
+CompileFlags:
+  Add:
+    - "-L/usr/include/llvm-15"
+    - "-L/usr/include/llvm-c-15"
+    - "-lLLVM-15"
+    - "-I/usr/lib/llvm-15/include"
+    - "-I/usr/lib/llvm-c-15/include"
+    
