@@ -1,9 +1,9 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-#include <llvm-15/llvm/IR/IRBuilder.h>
-#include <llvm-15/llvm/IR/LLVMContext.h>
-#include <llvm-15/llvm/IR/Module.h>
+#include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
 #include <memory>
 #include <string>
 

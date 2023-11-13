@@ -1,7 +1,7 @@
 #include "mainllvm.h"
-#include <llvm-15/llvm/IR/LLVMContext.h>
-#include <llvm-15/llvm/IR/Module.h>
-#include <llvm-15/llvm/Support/raw_ostream.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
+#include <llvm/Support/raw_ostream.h>
 #include <memory>
 #include <string>
 #include <system_error>
