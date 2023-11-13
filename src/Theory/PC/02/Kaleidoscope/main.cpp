@@ -6,6 +6,7 @@
 #include "EvalVisitorImpl.h"
 #include "libs/ExprLexer.h"
 #include "libs/ExprParser.h"
+#include "main.h"
 
 int main(int argc, char **argv)
 {
