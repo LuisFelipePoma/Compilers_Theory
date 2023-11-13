@@ -4,8 +4,8 @@
 
 #include "antlr4-runtime.h"
 #include "EvalVisitorImpl.h"
-#include "libs/LabeledExprLexer.h"
-#include "libs/LabeledExprParser.h"
+#include "libs/ExprLexer.h"
+#include "libs/ExprParser.h"
 
 int main(int argc, char **argv)
 {
@@ -14,11 +14,11 @@ int main(int argc, char **argv)
 	std::ifstream is;
 	is.open(argv[1]);
 	antlr4::ANTLRInputStream input(is);
-	LabeledExprLexer lexer(&input);
+	ExprLexer lexer(&input);
 	antlr4::CommonTokenStream tokens(&lexer);
-	LabeledExprParser parser(&tokens);
-	auto tree = parser.prog();
+	ExprParser parser(&tokens);
+	auto tree = parser.program();
 	EvalVisitorImpl eval;
-	eval.visitProg(tree);
+	eval.visitProgram(tree);
 	return 0;
 }

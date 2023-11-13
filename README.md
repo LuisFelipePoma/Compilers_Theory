@@ -315,3 +315,17 @@
 			```bash
 			clang++ <file>.cpp $(llvm-config-15 --cxxflags) -lLLVM-15
 			```
+
+	- Optimizing a llvm project
+    	- For size of the output
+			```bash
+			clang++ -O0 <filename>.cpp args...
+			```
+    	- For eficc of the output
+			```bash
+			clang++ -O3 <filename>.cpp args...
+			```
+    	- For eficc2 of the output
+			```bash
+			clang++ -Ofast <filename>.cpp args...
+			```
