@@ -284,9 +284,27 @@
 		```bash
 		sudo apt-get install llvm-15 llvm-15-dev llvm-15-doc llvm-15-linker-tools llvm-15-runtime llvm-15-tools
 		```
+	
+	- Installing manually
+		```bash
+		git clone --depth 1 https://github.com/llvm/llvm-project.git
+		```
+		```bash
+		cd llvm-project
+		```
+		```bash
+		cmake -S llvm -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+		```
+		```bash
+		cmake --build build -j4
+		```
+		> For install like in the libraries of the system
+		```bash
+		cmake --install build --prefix /usr/local/include
+		```
 
 	### Using llvm
-
+	
     - Generate Code to Dot Language
 		- Generate Intermediate code with clang.
 			```bash
@@ -314,6 +332,17 @@
     	- For Debian
 			```bash
 			clang++ <file>.cpp $(llvm-config-15 --cxxflags) -lLLVM-15
+			```
+		- With Cmake
+			```bash
+			cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+			```
+			```bash
+			cmake --build build
+			```
+			> Execute the binary file in `./build/`
+			```bash
+			build/prog
 			```
 
 	- Optimizing a llvm project

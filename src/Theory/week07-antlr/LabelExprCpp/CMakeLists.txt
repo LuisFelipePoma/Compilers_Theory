@@ -1,21 +1,8 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.14)
 
-project(antlr)
-
-set(ANTRL4I "/usr/include/antlr4-runtime")
-file(GLOB LIB_SOURCES "libs/*.cpp" "libs/*.h")
-
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(antlr  
-    main.cpp
-    ${LIB_SOURCES}
-    
-)
-
-
-# Configura las opciones de compilación
-target_include_directories(antlr PRIVATE ${ANTRL4I} libs)
-
-# Enlaza con las bibliotecas necesarias
-target_link_libraries(antlr PRIVATE antlr4-runtime stdc++)
+project(prog)
+include_directories($ENV{ANTLR4I})
+file(GLOB SOURCES "*.cpp")
+add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_directories(${PROJECT_NAME} PUBLIC $ENV{ANTLR4L})
+target_link_libraries(${PROJECT_NAME} antlr4-runtime)
