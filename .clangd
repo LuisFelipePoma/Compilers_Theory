@@ -1,10 +1,11 @@
 CompileFlags:
   Add:
-    <!-- - "-L/usr/include/llvm-15"
-    - "-L/usr/include/llvm-c-15"
-    - "-lLLVM-15"
-    - "-I/usr/lib/llvm-15/include"
-    - "-I/usr/lib/llvm-c-15/include"
-    - "-I/usr/local/include/antlr4-runtime"
-    - "-lantlr4-runtime" -->
+    <!-- - "-L/usr/include/llvm-15" -->
+    <!-- - "-L/usr/include/llvm-c-15" -->
+    <!-- - "-lLLVM-17" -->
+    <!-- - "-I/usr/lib/llvm-15/include" -->
+    <!-- - "-I/usr/lib/llvm-c-15/include" -->
+    <!-- - "-I/usr/local/include/antlr4-runtime" -->
+    <!-- - "-lantlr4-runtime" -->
+    <!-- - "-Ilibs /home/felipe/Codes/Compilers/src/Theory/PC/R/" -->
     
