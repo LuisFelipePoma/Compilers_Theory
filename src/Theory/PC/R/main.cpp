@@ -4,8 +4,8 @@
 #include <ostream>
 #include <string>
 
-#include "pcdosLexer.h"
-#include "pcdosParser.h"
+#include "libs/pcdosLexer.h"
+#include "libs/pcdosParser.h"
 #include "antlr4-runtime.h"
 #include "pcdosVisitorImpl.h"
 
@@ -20,7 +20,8 @@ int main(int argc, char **argv)
 	antlr4::CommonTokenStream tokens(&lexer);
 	pcdosParser parser(&tokens);
 	auto tree = parser.prog();
-	// EvalVisitorImpl eval;
-	// eval.visitProg(tree);
-	std::cout << tree->toStringTree(true) << std::endl;
+	pcdosVisitorImpl eval;
+	eval.visitProg(tree);
+	eval.test();
+	// std::cout << tree->toStringTree(true) << std::endl;
 }

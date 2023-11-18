@@ -6,5 +6,6 @@ CompileFlags:
     <!-- - "-I/usr/lib/llvm-15/include" -->
     <!-- - "-I/usr/lib/llvm-c-15/include" -->
     - "-I/usr/local/include/antlr4-runtime"
+    - "-Ilibs libs/*.cpp"
     - "-lantlr4-runtime"
     
