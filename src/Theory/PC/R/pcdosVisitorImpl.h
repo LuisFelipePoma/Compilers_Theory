@@ -1,10 +1,8 @@
-// #pragma once
 #ifndef __PCDOS_VISITOR_IMPL__
 #define __PCDOS_VISITOR_IMPL__
 
-// Include the missing file here
 #include "libs/pcdosBaseVisitor.h"
-#include "libs/pcdosParser.h" 
+#include "libs/pcdosParser.h"
 
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/LLVMContext.h"
@@ -12,6 +10,10 @@
 #include <algorithm>
 #include <any>
 #include <iostream>
+#include <llvm/ADT/StringRef.h>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/Instructions.h>
+#include <llvm/IR/Type.h>
 #include <llvm/Support/raw_ostream.h>
 #include <map>
 #include <memory>
@@ -55,6 +57,19 @@ private:
 	std::unique_ptr<llvm::LLVMContext> context;
 	std::unique_ptr<llvm::Module> module;
 	std::unique_ptr<llvm::IRBuilder<>> builder;
+
+	// aux
+	llvm::Function *F;
+
+	// aux methods
+	llvm::AllocaInst *CreateEntryBlockAlloca(llvm::StringRef varName)
+	{
+		llvm::IRBuilder<> TmpB(&F->getEntryBlock(), F->getEntryBlock().begin());
+		return TmpB.CreateAlloca(llvm::Type::getDoubleTy(*context), nullptr,
+								 varName);
+	}
 };
 
 #endif
+
+// vim: set ts=2:sw=2:et:sts=2:

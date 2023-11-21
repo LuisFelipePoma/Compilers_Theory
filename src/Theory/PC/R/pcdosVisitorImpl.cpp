@@ -7,6 +7,7 @@
 #include <llvm/IR/DerivedTypes.h>
 #include <llvm/IR/Function.h>
 #include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/Instructions.h>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Type.h>
@@ -29,7 +30,7 @@ std::any pcdosVisitorImpl::visitPrintExpr(pcdosParser::PrintExprContext *ctx)
 	llvm::FunctionType *FT = llvm::FunctionType::get(
 		llvm::Type::getDoubleTy(*context), Doubles, false);
 
-	llvm::Function *F = llvm::Function::Create(
+	F = llvm::Function::Create(
 		FT, llvm::Function::ExternalLinkage, "_anon_", module.get());
 
 	llvm::BasicBlock *BB = llvm::BasicBlock::Create(*context, "entry", F);
@@ -112,7 +113,11 @@ std::any pcdosVisitorImpl::visitParens(pcdosParser::ParensContext *ctx)
 std::any pcdosVisitorImpl::visitId(pcdosParser::IdContext *ctx)
 {
 	std::cout << "visitId\n";
-	return visitChildren(ctx);
+	std::string idName = ctx->ID()->getText();
+	llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(idName);
+	memory[idName] = Alloca;
+	return std::any(Alloca);
+	// return visitChildren(ctx);
 }
 
 std::any pcdosVisitorImpl::visitProto(pcdosParser::ProtoContext *ctx)
@@ -132,3 +137,5 @@ std::any pcdosVisitorImpl::visitExtern(pcdosParser::ExternContext *ctx)
 	std::cout << "visitExtern\n";
 	return visitChildren(ctx);
 }
+
+// vim: set ts=2:sw=2:et:sts=2:

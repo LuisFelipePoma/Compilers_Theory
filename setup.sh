@@ -13,7 +13,7 @@ setup(){
 	alias grun='java org.antlr.v4.gui.TestRig'
 
 	export MYDEPENDENCIES=$HOME/Apps
-	export LLVMDEPENDENCIES=$HOME/llvm/llvm-project/build
+	export LLVMDEPENDENCIES=/usr/lib/llvm-17
 
 	export ANTLR4HOME=$MYDEPENDENCIES/antlr4-cpp/run
 	export ANTLR4I=$ANTLR4HOME/usr/local/include/antlr4-runtime
