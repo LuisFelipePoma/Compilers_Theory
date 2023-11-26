@@ -1,35 +1,44 @@
-#include <cstddef>
-#include <llvm-15/llvm/IR/BasicBlock.h>
-#include <llvm-15/llvm/IR/DerivedTypes.h>
-#include <llvm-15/llvm/IR/IRBuilder.h>
-#include <llvm-15/llvm/IR/Intrinsics.h>
-#include <llvm-15/llvm/IR/LLVMContext.h>
-#include <llvm-15/llvm/IR/Module.h>
-#include <llvm-15/llvm/IR/Type.h>
+#include <llvm/ADT/APFloat.h>
+#include <llvm/ExecutionEngine/ExecutionEngine.h>
+#include <llvm/IR/BasicBlock.h>
+#include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/Intrinsics.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
+#include <llvm/IR/Type.h>
+#include <llvm/Support/raw_ostream.h>
 #include <memory>
 #include <vector>
-
-using namespace llvm;
+#include <iostream>
+#include <llvm/Support/TargetSelect.h>
 
 int main()
 {
+	// InitializeNativeTarget();
+	// InitializeNativeTargetAsmPrinter();
 	auto TheContext = std::make_unique<llvm::LLVMContext>();
-	auto TheModule = std::make_unique<Module>("Mi cool jit", *TheContext);
-	auto TheBuilder = std::make_unique<IRBuilder<>>(*TheContext);
+	auto TheModule = std::make_unique<llvm::Module>("Mi cool jit", *TheContext);
+	auto TheBuilder = std::make_unique<llvm::IRBuilder<>>(*TheContext);
 
-	Type *Tys[] = {Type::getInt8PtrTy(*TheContext), Type::getInt32Ty(*TheContext)};
-	Function *memset_func = Intrinsic::getDeclaration(TheModule.get(), Intrinsic::memset, Tys);
+	std::cout << "visitPrintExpr\n";
+	std::vector<double> Args;
+	std::vector<llvm::Type *> Doubles(Args.size(),
+									  llvm::Type::getDoubleTy(*TheContext));
+	llvm::FunctionType *FT = llvm::FunctionType::get(
+		llvm::Type::getDoubleTy(*TheContext), Doubles, false);
 
-	auto getchar_func = TheModule->getOrInsertFunction("getchar", IntegerType::getInt32Ty(*TheContext));
+	llvm::Function *F = llvm::Function::Create(
+		FT, llvm::Function::ExternalLinkage, "_anon_", TheModule.get());
 
-	std::vector<Type *> Doubles(0, Type::getDoubleTy(*TheContext));
-	FunctionType *FT = FunctionType::get(Type::getDoubleTy(*TheContext), Doubles, false);
-	Function *Func = Function::Create(FT, Function::ExternalLinkage, "func", TheModule.get());
-
-	BasicBlock *BB = BasicBlock::Create(*TheContext, "entry", Func);
+	llvm::BasicBlock *BB = llvm::BasicBlock::Create(*TheContext, "entry", F);
 	TheBuilder->SetInsertPoint(BB);
 
-	TheModule->print(errs(), nullptr);
+	auto numVal = 10.0;
+	llvm::Value *val = llvm::ConstantFP::get(*TheContext, llvm::APFloat(numVal));
+	
+	TheBuilder->CreateRet(val);
 
+	TheModule->print(llvm::errs(), nullptr);
 	return 0;
 }

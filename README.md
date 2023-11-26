@@ -272,8 +272,8 @@
            ```
 
         5. Now execute the program with `make`
-5. How to use LLVM-15
-    ### Install llvm
+5. How to use LLVM
+    ### Installing
 
 	- Using CLI in Arch
 		```bash
@@ -303,6 +303,27 @@
 		cmake --install build --prefix /usr/local/include
 		```
 
+	- Installing a `X` version
+    	```bash
+		bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+		```
+		> To install a specific version of LLVM:
+    	```bash
+		wget https://apt.llvm.org/llvm.sh
+		chmod +x llvm.sh
+		sudo ./llvm.sh <version number>
+		```
+	
+		> To install all apt.llvm.org packages at once:
+
+		```bash
+		wget https://apt.llvm.org/llvm.sh
+		chmod +x llvm.sh
+		sudo ./llvm.sh <version number> all
+		# or
+		sudo ./llvm.sh all
+		```
+		
 	### Using llvm
 	
     - Generate Code to Dot Language

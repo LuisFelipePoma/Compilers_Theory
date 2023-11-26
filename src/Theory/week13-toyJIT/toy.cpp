@@ -1,6 +1,5 @@
 #include "include/KaleidoscopeJIT.h"
 #include "llvm/ADT/APFloat.h"
-#include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
@@ -17,8 +16,6 @@
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 
-#include <algorithm>
-#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <cstdio>
