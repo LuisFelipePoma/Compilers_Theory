@@ -18,6 +18,9 @@
 
 std::any pcdosVisitorImpl::visitProg(pcdosParser::ProgContext *ctx)
 {
+	// Creates the sys call functions
+	llvm::Function *executeCommandFunction = module->getFunction("puts");
+
 	// Creates the main Function
 	std::vector<llvm::Type *> Doubles(0,
 									  llvm::Type::getDoubleTy(*context));
@@ -44,6 +47,9 @@ std::any pcdosVisitorImpl::visitPrintExpr(pcdosParser::PrintExprContext *ctx)
 {
 	llvm::Value *value = std::any_cast<llvm::Value *>(visit(ctx->expr()));
 	value->print(llvm::errs(), false);
+
+	llvm::FunctionCallee putsFunc = module->getOrInsertFunction("puts", llvm::Type::getInt32Ty(*context), llvm::Type::getInt8PtrTy(*context));
+	llvm::CallInst *result = builder->CreateCall(putsFunc, {builder->CreateGlobalStringPtr(value->getName())}, "callSystem");
 
 	return std::any();
 }
