@@ -16,10 +16,33 @@
 #include <llvm/IR/Value.h>
 #include <typeinfo>
 
+void pcdosVisitorImpl::IRFunctionSysDecl(const char *nameFunction, std::vector<llvm::Type *> argTy, bool isVar)
+{
+	std::vector<llvm::Type *> argTypes = argTy; // Argument type is char*
+												// Declare C standard library printf
+
+	llvm::FunctionType *funcType = llvm::FunctionType::get(
+		int32Type, // Return type is int
+		argTypes,  // Argument types
+		isVar	   // Is vararg?
+	);
+
+	llvm::Function *func = llvm::Function::Create(
+		funcType,
+		llvm::Function::ExternalLinkage,
+		nameFunction, // Function name
+		module.get()  // Get the raw pointer
+	);
+}
+
 std::any pcdosVisitorImpl::visitProg(pcdosParser::ProgContext *ctx)
 {
+	int8Type = llvm::Type::getInt8Ty(*context);
+	int32Type = llvm::Type::getInt32Ty(*context);
+	charPtrType = llvm::PointerType::get(int8Type, 0);
+
 	// Creates the sys call functions
-	llvm::Function *executeCommandFunction = module->getFunction("puts");
+	IRFunctionSysDecl("puts", {charPtrType}, false);
 
 	// Creates the main Function
 	std::vector<llvm::Type *> Doubles(0,

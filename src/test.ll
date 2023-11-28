@@ -3,6 +3,8 @@ source_filename = "LaPC2"
 
 @0 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
 
+declare i32 @puts(ptr)
+
 define void @_anon_() {
 entry:
   %b = alloca double, align 8
@@ -12,5 +14,3 @@ entry:
   %callSystem = call i32 @puts(ptr @0)
   ret void
 }
-
-declare i32 @puts(ptr)
