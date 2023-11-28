@@ -1,11 +1,7 @@
 CompileFlags:
   Add:
-    <!-- - "-L/usr/include/llvm-15" -->
-    <!-- - "-L/usr/include/llvm-c-15" -->
     - "-lLLVM-17"
-    <!-- - "-I/usr/lib/llvm-15/include" -->
-    <!-- - "-I/usr/lib/llvm-c-15/include" -->
     - "-I/usr/local/include/antlr4-runtime"
-    - "-Ilibs libs/*.cpp"
+    - "-I/usr/lib/llvm-17/include"
+    - "-L/usr/lib/llvm-17/lib"
     - "-lantlr4-runtime"
-    

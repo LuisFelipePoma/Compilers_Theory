@@ -1,4 +1,4 @@
-//===- KaleidoscopeJIT.h - A simple JIT for Kaleidoscope --------*- C++ -*-===//
+//===- JIT.h - A simple JIT for Kaleidoscope --------*- C++ -*-===//
 //
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
@@ -30,7 +30,7 @@
 namespace llvm {
 namespace orc {
 
-class KaleidoscopeJIT {
+class JIT {
 private:
   std::unique_ptr<ExecutionSession> ES;
 
@@ -43,7 +43,7 @@ private:
   JITDylib &MainJD;
 
 public:
-  KaleidoscopeJIT(std::unique_ptr<ExecutionSession> ES,
+  JIT(std::unique_ptr<ExecutionSession> ES,
                   JITTargetMachineBuilder JTMB, DataLayout DL)
       : ES(std::move(ES)), DL(std::move(DL)), Mangle(*this->ES, this->DL),
         ObjectLayer(*this->ES,
@@ -60,12 +60,12 @@ public:
     }
   }
 
-  ~KaleidoscopeJIT() {
+  ~JIT() {
     if (auto Err = ES->endSession())
       ES->reportError(std::move(Err));
   }
 
-  static Expected<std::unique_ptr<KaleidoscopeJIT>> Create() {
+  static Expected<std::unique_ptr<JIT>> Create() {
     auto EPC = SelfExecutorProcessControl::Create();
     if (!EPC)
       return EPC.takeError();
@@ -79,7 +79,7 @@ public:
     if (!DL)
       return DL.takeError();
 
-    return std::make_unique<KaleidoscopeJIT>(std::move(ES), std::move(JTMB),
+    return std::make_unique<JIT>(std::move(ES), std::move(JTMB),
                                              std::move(*DL));
   }
 
