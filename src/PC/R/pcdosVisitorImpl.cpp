@@ -92,7 +92,6 @@ std::any pcdosVisitorImpl::visitProg(pcdosParser::ProgContext *ctx)
 std::any pcdosVisitorImpl::visitPrintExpr(pcdosParser::PrintExprContext *ctx)
 {
 	llvm::Value *value = std::any_cast<llvm::Value *>(visit(ctx->expr()));
-	value->print(llvm::errs(), false);
 
 	llvm::FunctionCallee putsFunc = module->getOrInsertFunction("puts", llvm::Type::getInt32Ty(*context), llvm::Type::getInt8PtrTy(*context));
 	llvm::CallInst *result = builder->CreateCall(putsFunc, {builder->CreateGlobalStringPtr(value->getName())}, "callSystem");
@@ -180,16 +179,15 @@ std::any pcdosVisitorImpl::visitMulDiv(pcdosParser::MulDivContext *ctx)
 
 std::any pcdosVisitorImpl::visitAddSub(pcdosParser::AddSubContext *ctx)
 {
-	llvm::IRBuilder<> builder(*context);
 	llvm::Value *L = std::any_cast<llvm::Value *>(visit(ctx->expr(0)));
 	llvm::Value *R = std::any_cast<llvm::Value *>(visit(ctx->expr(1)));
 	if (ctx->op->getType() == pcdosParser::ADD)
 	{
-		return std::any(builder.CreateFAdd(L, R, "addTemp"));
+		return std::any(builder->CreateFAdd(L, R, "addTemp"));
 	}
 	else
 	{
-		return std::any(builder.CreateFSub(L, R, "subTemp"));
+		return std::any(builder->CreateFSub(L, R, "subTemp"));
 	}
 }
 
@@ -261,17 +259,17 @@ std::any pcdosVisitorImpl::visitDef(pcdosParser::DefContext *ctx)
 	{
 		std::string argName = args.at(Idx++);
 		Arg.setName(argName);
-		memory.insert({argName, &Arg});
+		memory.insert({argName, dynamic_cast<llvm::Value *>(&Arg)});
 	}
+
+	// Visit expr
+	visit(ctx->stat());
 
 	// Clean the memory from the args
 	for (auto arg : args)
 	{
 		memory.erase(arg);
 	}
-
-	// Visit expr
-	visit(ctx->expr());
 
 	// create return
 	builder->CreateRet(nullptr);

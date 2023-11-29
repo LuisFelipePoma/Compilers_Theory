@@ -26,7 +26,7 @@ prototype
 	;
 
 definition
-	: 'def' prototype expr     # Def
+	: 'def' prototype stat     # Def
 	;
 
 external
