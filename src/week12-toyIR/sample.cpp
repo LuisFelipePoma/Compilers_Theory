@@ -18,7 +18,7 @@ static auto TheContext = std::make_unique<llvm::LLVMContext>();
 static auto TheModule = std::make_unique<llvm::Module>("Mi cool jit", *TheContext);
 static auto TheBuilder = std::make_unique<llvm::IRBuilder<>>(*TheContext);
 
-void createFunction(const char *name, llvm::Type *, llvm::Value *);
+void createFunction(const char *name, int sizeArgs, llvm::Type *, llvm::Value *);
 
 int main()
 {
@@ -32,21 +32,21 @@ int main()
 	llvm::Value *valDouble = llvm::ConstantFP::get(*TheContext, llvm::APFloat(1.2));
 
 	// init
-	createFunction("_main_void_", typeVoid, nullptr);
-	createFunction("_int_", typeInt, valInt);
-	createFunction("_double_", typeDouble, valDouble);
+	createFunction("_main_void_", 0, typeVoid, nullptr);
+	createFunction("_int_", 0, typeInt, valInt);
+	createFunction("_double_", 0, typeDouble, valDouble);
+	createFunction("_doubleArgs_", 2, typeDouble, valDouble);
 
-	// NO andre no! 
+	// NO andre no!
 	TheModule->print(llvm::errs(), nullptr);
 
 	return 0;
 }
 
-void createFunction(const char *name, llvm::Type *types, llvm::Value *value)
+void createFunction(const char *name, int sizeArgs, llvm::Type *types, llvm::Value *value)
 {
 	// Types
-	std::vector<double> args;
-	std::vector<llvm::Type *> Doubles(args.size(), llvm::Type::getDoubleTy(*TheContext));
+	std::vector<llvm::Type *> Doubles(sizeArgs, llvm::Type::getDoubleTy(*TheContext));
 
 	// Function Args
 	llvm::FunctionType *functionTypes = llvm::FunctionType::get(
@@ -62,6 +62,32 @@ void createFunction(const char *name, llvm::Type *types, llvm::Value *value)
 	llvm::BasicBlock *BB = llvm::BasicBlock::Create(*TheContext, "entry", F);
 	TheBuilder->SetInsertPoint(BB);
 
+	// Body
+	//  Set name for arguments
+	unsigned Idx = 0;
+	std::vector<llvm::Value *> values;
+	for (auto &Arg : F->args())
+	{
+		Arg.setName("arg" + std::to_string(Idx++));
+		values.push_back(&Arg);
+	}
+
+	if (sizeArgs >= 2)
+	{
+		llvm::IRBuilder<> builder(*TheContext);
+		llvm::Value *sum = builder.CreateAdd(values[0], values[1], "sum");
+
+		TheBuilder->CreateRet(sum);
+
+		return;
+	}
+
 	// Return value
 	TheBuilder->CreateRet(value);
 }
+
+// void callFunction(const char *nameFunction)
+// {
+// 	llvm::Function *executeCommandFunction = TheModule->getFunction(nameFunction);
+// 	llvm::CallInst *result = TheBuilder->CreateCall(executeCommandFunction, {}, "calltmp");
+// }

@@ -1,3 +1,5 @@
-a = 12
-b = a + 10
-b
+a = 1
+b = 10 + a
+c = a + b
+def hola(x, y, z) 1 + 2
+hola(a,b,c)

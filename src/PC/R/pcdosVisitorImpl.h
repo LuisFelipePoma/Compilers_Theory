@@ -53,6 +53,7 @@ public:
 
 private:
 	std::map<std::string, std::any> memory;
+	std::map<std::string, std::vector<std::string>> argsFn;
 	std::unique_ptr<llvm::LLVMContext> context;
 	std::unique_ptr<llvm::Module> module;
 	std::unique_ptr<llvm::IRBuilder<>> builder;
@@ -67,10 +68,15 @@ private:
 		return TmpB.CreateAlloca(llvm::Type::getDoubleTy(*context), nullptr,
 								 varName);
 	}
+
+	void goToMain();
+	llvm::Value *CreateFloatV(double number);
+	
 	// Types
 	llvm::Type *int8Type;
 	llvm::Type *int32Type;
 	llvm::Type *charPtrType;
+	llvm::Type *typeDouble;
 };
 
 #endif
