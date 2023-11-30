@@ -1,4 +1,4 @@
-#include "grammar/Parser.h"
+#include "grammar/parser.h"
 
 //===----------------------------------------------------------------------===//
 // Top-Level parsing and JIT Driver
