@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - "-lLLVM-17"
+    - "-I/usr/local/include/antlr4-runtime"
+    - "-I/usr/lib/llvm-17/include"
+    - "-L/usr/lib/llvm-17/lib"
+    - "-lantlr4-runtime"
